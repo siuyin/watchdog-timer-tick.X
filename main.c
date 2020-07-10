@@ -30,17 +30,16 @@
 #define UPPER_LED RB2
 #define LOWER_LED RB3
 
+void setup_portb(void);
+
 void main(void) {
     PSA = 0; // prescaler set to TMR0 and not watchdog timer
 
-    PORTB = 0;
-    TRISB = 0;
-
-    LOWER_LED = 1;
-
+    setup_portb();
+    
     const unsigned char lower_led_task_period_ticks = 27; // about 500ms
     unsigned char lower_led_task_ctr = lower_led_task_period_ticks;
-    
+
     const unsigned char upper_led_task_period_ticks = 27; // about 500ms
     unsigned char upper_led_task_ctr = upper_led_task_period_ticks;
 
@@ -53,11 +52,18 @@ void main(void) {
             UPPER_LED = ~UPPER_LED;
             upper_led_task_ctr = upper_led_task_period_ticks;
         }
-        
+
         SLEEP(); // WDT timer wakes up device and continues execution.
-        if(lower_led_task_ctr>0)lower_led_task_ctr--;
-        if(upper_led_task_ctr>0)upper_led_task_ctr--;
+        if (lower_led_task_ctr > 0)lower_led_task_ctr--;
+        if (upper_led_task_ctr > 0)upper_led_task_ctr--;
     }
 
     return;
+}
+
+void setup_portb(void) {
+    PORTB = 0; // set all of port b to outputs
+    TRISB = 0;
+
+    LOWER_LED = 1;
 }
