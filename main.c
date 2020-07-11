@@ -34,7 +34,7 @@ void setup_portb(void);
 
 void main(void) {
     PSA = 0; // prescaler set to TMR0 and not watchdog timer
-    
+
     setup_portb();
 
     const unsigned char lower_led_task_period_ticks = 27; // about 500ms
